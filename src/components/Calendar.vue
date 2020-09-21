@@ -6,7 +6,9 @@
       </v-toolbar>
       <v-sheet height="64">
         <v-toolbar flat color="white">
-          <v-btn color="pink accent-2" class="mr-4" @click="dialog = true" dark>New Event</v-btn>
+          <v-btn color="pink accent-2" class="mr-4" @click="dialog = true" dark
+            >New Event</v-btn
+          >
           <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
           <v-btn fab text small @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
@@ -27,14 +29,14 @@
               <v-list-item @click="type = 'day'">
                 <v-list-item-title>Day</v-list-item-title>
               </v-list-item>
+              <v-list-item @click="type = '4day'">
+                <v-list-item-title>4 days</v-list-item-title>
+              </v-list-item>
               <v-list-item @click="type = 'week'">
                 <v-list-item-title>Week</v-list-item-title>
               </v-list-item>
               <v-list-item @click="type = 'month'">
                 <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 days</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -45,11 +47,31 @@
         <v-card>
           <v-container>
             <v-form @submit.prevent="createNewEvent">
-              <v-text-field v-model="name" type="text" label="Event name (required)"></v-text-field>
-              <v-text-field v-model="details" type="text" label="Detail"></v-text-field>
-              <v-text-field v-model="start" type="date" label="Start date (required)"></v-text-field>
-              <v-text-field v-model="end" type="date" label="End date (required)"></v-text-field>
-              <v-text-field v-model="color" type="color" label="color (click to open color menu)"></v-text-field>
+              <v-text-field
+                v-model="name"
+                type="text"
+                label="Event name (required)"
+              ></v-text-field>
+              <v-text-field
+                v-model="details"
+                type="text"
+                label="Detail"
+              ></v-text-field>
+              <v-text-field
+                v-model="start"
+                type="date"
+                label="Start date (required)"
+              ></v-text-field>
+              <v-text-field
+                v-model="end"
+                type="date"
+                label="End date (required)"
+              ></v-text-field>
+              <v-text-field
+                v-model="color"
+                type="color"
+                label="color (click to open color menu)"
+              ></v-text-field>
               <v-btn
                 small
                 color="purple darken-1"
@@ -57,13 +79,15 @@
                 class="mr-4"
                 type="submit"
                 @click.stop="dialog = false"
-              >Create Event</v-btn>
+                >Create Event</v-btn
+              >
               <v-btn
                 small
                 outlined
                 color="blue-grey darken-3"
                 @click.stop="dialog = false"
-              >Close</v-btn>
+                >Close</v-btn
+              >
             </v-form>
           </v-container>
         </v-card>
@@ -99,7 +123,9 @@
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-card-text>
-              <form v-if="currentlyEditing !== selectedEvent.id">{{selectedEvent.details}}</form>
+              <form v-if="currentlyEditing !== selectedEvent.id">
+                {{ selectedEvent.details }}
+              </form>
               <form v-else>
                 <textarea-autosize
                   v-model="selectedEvent.details"
@@ -111,13 +137,18 @@
               </form>
             </v-card-text>
             <v-card-actions>
-              <v-btn text color="secondary" @click="selectedOpen = false">Close</v-btn>
+              <v-btn text color="secondary" @click="selectedOpen = false"
+                >Close</v-btn
+              >
               <v-btn
                 text
                 v-if="currentlyEditing !== selectedEvent.id"
                 @click.prevent="editEvent(selectedEvent)"
-              >Edit</v-btn>
-              <v-btn text v-else @click.prevent="updateEvent(selectedEvent)">Save</v-btn>
+                >Edit</v-btn
+              >
+              <v-btn text v-else @click.prevent="updateEvent(selectedEvent)"
+                >Save</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -138,7 +169,7 @@ export default {
       month: "Month",
       week: "Week",
       day: "Day",
-      "4day": "4 Days"
+      "4day": "4 Days",
     },
     start: null,
     end: null,
@@ -150,7 +181,7 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    dialog: false
+    dialog: false,
   }),
   computed: {
     title() {
@@ -184,9 +215,9 @@ export default {
     monthFormatter() {
       return this.$refs.calendar.getFormatter({
         timeZone: "UTC",
-        month: "long"
+        month: "long",
       });
-    }
+    },
   },
   mounted() {
     this.getEvents();
@@ -195,7 +226,7 @@ export default {
     async getEvents() {
       let snapshopOfDB = await db.collection("calEvent").get();
       let events = [];
-      snapshopOfDB.forEach(doc => {
+      snapshopOfDB.forEach((doc) => {
         let calendarData = doc.data();
         calendarData.id = doc.id;
         events.push(calendarData);
@@ -209,7 +240,7 @@ export default {
           details: this.details,
           start: this.start,
           end: this.end,
-          color: this.color
+          color: this.color,
         });
         this.getEvents();
         this.name = "";
@@ -226,7 +257,7 @@ export default {
         .collection("calEvent")
         .doc(this.currentlyEditing)
         .update({
-          details: event.details
+          details: event.details,
         });
       this.selectedOpen = false;
       this.currentlyEditing = null;
@@ -284,7 +315,7 @@ export default {
       return d > 3 && d < 21
         ? "th"
         : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
-    }
-  }
+    },
+  },
 };
 </script>
